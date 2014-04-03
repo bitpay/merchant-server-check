@@ -16,8 +16,8 @@
  * THE SOFTWARE.
  *
  * Server environment check script to determine if a merchant's
- * merchant's server has the correct software installed and can
- * communicate with the BitPay network properly.
+ * server has the correct software installed and can communicate 
+ * with the BitPay network properly.
  *
  * Version 0.01, rich@bitpay.com
  *
