@@ -16,17 +16,17 @@
  * THE SOFTWARE.
  *
  * Server environment check script to determine if a merchant's
- * server has the correct software installed and can communicate 
- * with the BitPay network properly.
+ * merchant's server has the correct software installed and can
+ * communicate with the BitPay network properly.
  *
- * Version 0.01, rich@bitpay.com
+ * Version 0.02, rich@bitpay.com
  *
  */
 
 date_default_timezone_set('UTC');
 
 $timestamp = date('H:i:s m-d-Y');
-$script_version = '0.01';
+$script_version = '0.02';
 $check_results = array();
 $phpversion = phpversion();
 $extensions = get_loaded_extensions();
@@ -34,6 +34,7 @@ $logfilename = dirname(__FILE__) . '/envcheck.log';
 $local_url = 'https://' . $_SERVER['SERVER_NAME'];
 $bitpay_url = 'https://bitpay.com/';
 $curlpresent = false;
+$jsonpresent = false;
 $problem_found = false;
 
 function curlCheck($url) {
@@ -45,7 +46,7 @@ function curlCheck($url) {
   $curl = curl_init();
 
   $header = array(
-                  'X-BitPay-Plugin-Info: envcheck0.01',
+                  'X-BitPay-Plugin-Info: envcheck' . $script_version,
                   );
 
   curl_setopt($curl, CURLOPT_URL, $url);
@@ -73,7 +74,7 @@ function curlCheck($url) {
 
 $output = '<pre>';
 $output .= '===============================================================' . "\r\n";
-$output .= 'BitPay Merchant Server Environment Check v0.01' . "\r\n";
+$output .= 'BitPay Merchant Server Environment Check v' . $script_version . "\r\n";
 $output .= '===============================================================' . "\r\n";
 $output .= 'The following information has been compiled to help you' . "\r\n";
 $output .= 'ensure your server is ready to use one of our code libraries' . "\r\n";
@@ -101,7 +102,11 @@ $output .= 'Extensions: ';
 foreach($extensions as $key => $value) {
   if(trim($value) == 'curl') {
     $curlpresent = true;
-    $output .= 'Found curl - Good!';
+    $output .= ' Found curl - Good! ';
+  }
+  if(trim($value) == 'json') {
+    $jsonpresent = true;
+    $output .= ' Found json - Good! ';
   }
 }
 
@@ -128,8 +133,13 @@ if($curlpresent) {
 
 } else {
   $problem_found = true;
-  $output .= 'Problem found! The curl extension is not present! Contact your web hosting provider' . "\r\n" . 'and request this extension be added to your PHP installation.';
+  $output .= "\r\n\r\n" . 'Problem found! The curl extension is not present! Contact your web hosting provider' . "\r\n" . 'and request this extension be added to your PHP installation.';
   $output .= "\r\n" . 'Skipping communication checks...';
+}
+
+if(!$jsonpresent) {
+  $problem_found = true;
+  $output .= "\r\n\r\n" . 'Problem found! The json extension is not present! Contact your web hosting provider' . "\r\n" . 'and request this extension be added to your PHP installation.';
 }
 
 echo $output;
