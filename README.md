@@ -29,7 +29,7 @@ Open a web browser and navigate to the envcheck.php script on your web server.  
 Below is an example script output showing all checks passed:
 <pre>
 ===============================================================
-BitPay Merchant Server Environment Check v0.01
+BitPay Merchant Server Environment Check v0.02
 ===============================================================
 The following information has been compiled to help you
 ensure your server is ready to use one of our code libraries
@@ -45,7 +45,7 @@ if the directory is writable.
 ******* Check script run date/time: 21:22:44 04-03-2014 *******
 
 PHP Version: 5.3.10-1ubuntu3.9 - Good!
-Extensions: Found curl - Good!
+Extensions:  Found json - Good!  Found curl - Good!
 BitPay communication check: Good!
 Local communication check: Good!
 
@@ -59,3 +59,6 @@ Change Log
 ----------
 Version 0.01, rich@bitpay.com
   - Initial version
+
+Version 0.02, rich@bitpay.com
+  - Added check for JSON extension
